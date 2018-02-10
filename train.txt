@@ -1,0 +1,3 @@
+./images/llama.jpeg 355
+./images/sealion.jpeg 150 
+./images/zebra.jpeg 340
