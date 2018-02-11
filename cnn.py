@@ -92,8 +92,8 @@ def cross_entropy_loss(mat1, mat2):
 
 # dataset loader 
 
-# base_path = '/home/mayank/Desktop/BTP/Datasets/NUS_WIDE_10k/'
-base_path = '/home/btp17-18-1/datasets/NUS-WIDE-10k_Dataset/'
+base_path = '/home/mayank/Desktop/BTP/Datasets/NUS_WIDE_10k/'
+# base_path = '/home/btp17-18-1/datasets/NUS-WIDE-10k_Dataset/'
 nus_wide_10k_loader.setup_batch(base_path, 0.90, 0.20)
 def generate_next_batch(domain, kind, batch_size):
     if domain=='source' and kind=='train':

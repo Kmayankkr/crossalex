@@ -28,8 +28,7 @@ import numpy as np
 class AlexNet(object):
     """Implementation of the AlexNet."""
 
-    def __init__(self, x, keep_prob, num_classes, skip_layer,
-                 weights_path='DEFAULT'):
+    def __init__(self, x, keep_prob, skip_layer, weights_path='DEFAULT'):
         """Create the graph of the AlexNet model.
 
         Args:
@@ -43,7 +42,6 @@ class AlexNet(object):
         """
         # Parse input arguments into class variables
         self.X = x
-        self.NUM_CLASSES = num_classes
         self.KEEP_PROB = keep_prob
         self.SKIP_LAYER = skip_layer
 
