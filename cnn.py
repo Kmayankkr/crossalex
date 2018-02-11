@@ -1,4 +1,5 @@
 
+
 from alexnet import AlexNet
 from datetime import datetime
 from tensorflow.contrib.data import Iterator
@@ -92,21 +93,33 @@ def cross_entropy_loss(mat1, mat2):
 
 # dataset loader 
 
+source_image_size = [227, 227, 3]
+source_text_size = [300]
+
+target_image_size = [256, 256, 3]
+target_text_size = [300]
+
 # base_path = '/home/mayank/Desktop/BTP/Datasets/NUS_WIDE_10k/'
 base_path = '/home/btp17-18-1/datasets/NUS-WIDE-10k_Dataset/'
 nus_wide_10k_loader.setup_batch(base_path, 0.90, 0.20)
 def generate_next_batch(domain, kind, batch_size):
     if domain=='source' and kind=='train':
+	image_size = source_image_size
+	text_size = source_text_size
         text_image_label = nus_wide_10k_loader.get_batch_source_train(batch_size)
     elif domain=='source' and kind=='test':
+	image_size = source_image_size
+        text_size = source_text_size
         text_image_label = nus_wide_10k_loader.get_batch_source_test(batch_size)
-    elif domain=='target' and kind=='train': 
+    elif domain=='target' and kind=='train':
+	image_size = target_image_size
+        text_size = target_text_size 
         text_image_label = nus_wide_10k_loader.get_batch_target_train(batch_size)
     elif domain=='target' and kind=='test':
         text_image_label = nus_wide_10k_loader.get_batch_target_test(batch_size)
 
-    image_batch = np.zeros([batch_size, 256, 256, 3])
-    text_batch = np.zeros([batch_size, 300])
+    image_batch = np.zeros([batch_size] + image_size)
+    text_batch = np.zeros([batch_size] + text_size)
     label_batch = np.zeros([batch_size, 10])
     counter = 0
 
@@ -114,7 +127,7 @@ def generate_next_batch(domain, kind, batch_size):
         text_batch[counter] = text
 
         temp_image = io.imread(base_path+'Dataset/' + str(image))
-        temp_image = transform.resize(temp_image, (256, 256, 3))
+        temp_image = transform.resize(temp_image, image_size)
         temp_image = img_as_float(temp_image)
         image_batch[counter] = temp_image
 
@@ -124,26 +137,25 @@ def generate_next_batch(domain, kind, batch_size):
 
     return text_batch, image_batch, label_batch
 
-
 batch_size = None
 
-source_image_input = tf.placeholder(tf.float32, [batch_size, 227, 227, 3], 'source_image')
-source_text_input = tf.placeholder(tf.float32, [batch_size, 300], 'source_text')
+source_image_input = tf.placeholder(tf.float32, [batch_size] + source_image_size, 'source_image')
+source_text_input = tf.placeholder(tf.float32, [batch_size] + source_text_size, 'source_text')
 source_label_input = tf.placeholder(tf.float32, [batch_size, 10], 'source_label')
 
-target_image_input = tf.placeholder(tf.float32, [batch_size, 256, 256, 3], 'target_image')
-target_text_input = tf.placeholder(tf.float32, [batch_size, 300], 'target_text')
+target_image_input = tf.placeholder(tf.float32, [batch_size] + target_image_size, 'target_image')
+target_text_input = tf.placeholder(tf.float32, [batch_size] + target_text_size, 'target_text')
 target_label_input = tf.placeholder(tf.float32, [batch_size, 10], 'target_label')
 
 # architecture
 
 # source image
 
-with tf.variable_scope("source_image"):
-    keep_prob = tf.placeholder(tf.float32)
-    model = AlexNet(source_image_input, keep_prob, ['fc7', 'fc6'])
+# with tf.variable_scope("source_image"):
+keep_prob = tf.placeholder(tf.float32)
+model = AlexNet(source_image_input, keep_prob, ['fc7', 'fc6'])
 
-    SI_hidden = model.dropout7
+SI_hidden = model.dropout7
 
 # source text
 
@@ -326,7 +338,7 @@ with tf.Session() as sess:
         # _, c = sess.run([optimizer4, text_l2_loss], feed_dict={source_text_input: source_text_batch, target_text_input: target_text_batch})
         # print "Epoch:", epoch, "Text l2 loss =", c
 
-        _, c = sess.run([optimizer5, source_image_l3_loss], feed_dict={source_image_input: source_image_batch, source_label_input: source_label_batch})
+        _, c = sess.run([optimizer5, source_image_l3_loss], feed_dict={source_image_input: source_image_batch, source_label_input: source_label_batch, keep_prob:0.7})
         print "Epoch:", epoch, " Source image l3 loss =", c
 
         # _, c = sess.run([optimizer6, source_text_l3_loss], feed_dict={source_text_input: source_text_batch, source_label_input: source_label_batch})
