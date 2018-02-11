@@ -115,7 +115,7 @@ with tf.name_scope("train"):
 #     tf.summary.histogram(var.name, var)
 
 # Add the loss to summary
-tf.summary.scalar('cross_entropy', loss)
+# tf.summary.scalar('cross_entropy', loss)
 
 
 # Evaluation op: Accuracy of the model
@@ -124,16 +124,16 @@ with tf.name_scope("accuracy"):
     accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # Add the accuracy to the summary
-tf.summary.scalar('accuracy', accuracy)
+# tf.summary.scalar('accuracy', accuracy)
 
 # Merge all summaries together
-merged_summary = tf.summary.merge_all()
+# merged_summary = tf.summary.merge_all()
 
 # Initialize the FileWriter
 # writer = tf.summary.FileWriter(filewriter_path)
 
 # Initialize an saver for store model checkpoints
-saver = tf.train.Saver()
+# saver = tf.train.Saver()
 
 # Get the number of training/validation steps per epoch
 train_batches_per_epoch = int(np.floor(tr_data.data_size/batch_size))
@@ -174,10 +174,10 @@ with tf.Session() as sess:
                                           keep_prob: dropout_rate})
 
             # Generate summary with the current batch of data and write to file
-            if step % display_step == 0:
-                s = sess.run(merged_summary, feed_dict={x: img_batch,
-                                                        y: label_batch,
-                                                        keep_prob: 1.})
+            # if step % display_step == 0:
+            #     s = sess.run(merged_summary, feed_dict={x: img_batch,
+            #                                             y: label_batch,
+            #                                             keep_prob: 1.})
 
                 # writer.add_summary(s, epoch*train_batches_per_epoch + step)
 

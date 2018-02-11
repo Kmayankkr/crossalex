@@ -143,7 +143,6 @@ with tf.variable_scope("source_image"):
     keep_prob = tf.placeholder(tf.float32)
     model = AlexNet(source_image_input, keep_prob, ['fc7', 'fc6'])
 
-    
     SI_hidden = model.dropout7
 
 # source text
