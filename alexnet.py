@@ -85,7 +85,7 @@ class AlexNet(object):
         self.dropout7 = dropout(fc7, self.KEEP_PROB)
 
         # 8th Layer: FC and return unscaled activations
-        # self.fc8 = fc(dropout7, 4096, self.NUM_CLASSES, relu=False, name='fc8')
+        # self.fc8 = fc(dropout7, 4096, , relu=False, name='fc8')
 
     def load_initial_weights(self, session):
         """Load weights from file into network.
@@ -107,6 +107,9 @@ class AlexNet(object):
                 with tf.variable_scope(op_name, reuse=True):
 
                     # Assign weights/biases to their corresponding tf variable
+                    if op_name=='fc8':
+                        continue
+
                     for data in weights_dict[op_name]:
 
                         # Biases

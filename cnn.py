@@ -92,8 +92,8 @@ def cross_entropy_loss(mat1, mat2):
 
 # dataset loader 
 
-base_path = '/home/mayank/Desktop/BTP/Datasets/NUS_WIDE_10k/'
-# base_path = '/home/btp17-18-1/datasets/NUS-WIDE-10k_Dataset/'
+# base_path = '/home/mayank/Desktop/BTP/Datasets/NUS_WIDE_10k/'
+base_path = '/home/btp17-18-1/datasets/NUS-WIDE-10k_Dataset/'
 nus_wide_10k_loader.setup_batch(base_path, 0.90, 0.20)
 def generate_next_batch(domain, kind, batch_size):
     if domain=='source' and kind=='train':
@@ -308,15 +308,14 @@ test_epoch = 1
 
 with tf.Session() as sess:
     sess.run(init_op)
-
     model.load_initial_weights(sess)
 
     for epoch in range(train_epoch):
         source_text_batch, source_image_batch, source_label_batch = generate_next_batch('source', 'train', 40)
         # target_text_batch, target_image_batch, target_label_batch = generate_next_batch('target', 'train', 40)
 
-        _, c = sess.run([optimizer1, source_l1_loss], feed_dict={source_image_input: source_image_batch, source_text_input: source_text_batch})
-        print "Epoch:", epoch, " Source l1 loss =", c
+        # _, c = sess.run([optimizer1, source_l1_loss], feed_dict={source_image_input: source_image_batch, source_text_input: source_text_batch})
+        # print "Epoch:", epoch, " Source l1 loss =", c
 
         # _, c = sess.run([optimizer2, target_l1_loss], feed_dict={target_image_input: target_image_batch, target_text_input: target_text_batch})
         # print "Epoch:", epoch, " Target l1 loss =", c
@@ -327,8 +326,8 @@ with tf.Session() as sess:
         # _, c = sess.run([optimizer4, text_l2_loss], feed_dict={source_text_input: source_text_batch, target_text_input: target_text_batch})
         # print "Epoch:", epoch, "Text l2 loss =", c
 
-        # _, c = sess.run([optimizer5, source_image_l3_loss], feed_dict={source_image_input: source_image_batch, source_label_input: source_label_batch})
-        # print "Epoch:", epoch, " Source image l3 loss =", c
+        _, c = sess.run([optimizer5, source_image_l3_loss], feed_dict={source_image_input: source_image_batch, source_label_input: source_label_batch})
+        print "Epoch:", epoch, " Source image l3 loss =", c
 
         # _, c = sess.run([optimizer6, source_text_l3_loss], feed_dict={source_text_input: source_text_batch, source_label_input: source_label_batch})
         # print "Epoch:", epoch, " Source text l3 loss =", c
